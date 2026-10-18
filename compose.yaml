@@ -1,0 +1,41 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: sncf
+      POSTGRES_USER: sncf
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Copiez .env.example vers .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sncf -d sncf"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+  etl:
+    build: .
+    command: python pipeline.py
+    environment:
+      PGHOST: db
+      PGDATABASE: sncf
+      PGUSER: sncf
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./data:/app/data
+  dashboard:
+    build: .
+    ports:
+      - "127.0.0.1:8501:8501"
+    environment:
+      PGHOST: db
+      PGDATABASE: sncf
+      PGUSER: sncf
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+    depends_on:
+      etl:
+        condition: service_completed_successfully
+volumes:
+  postgres_data:

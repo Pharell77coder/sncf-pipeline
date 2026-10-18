@@ -1,0 +1,14 @@
+{
+  "processed_at": "2026-10-17T00:34:59.609413+00:00",
+  "source": "https://ressources.data.sncf.com/api/explore/v2.1/catalog/datasets/regularite-mensuelle-tgv-axes/exports/json",
+  "sha256": "0320c6de844e74c9f93720f4cb8dce8ba367ee9744cbb86ac52a9e3a71acd2de",
+  "rows": 835,
+  "duplicates_removed": 0,
+  "null_rates": {
+    "regularite_composite": 1,
+    "ponctualite_origine": 1
+  },
+  "first_month": "2015-01-01",
+  "last_month": "2026-09-01",
+  "offline": true
+}
